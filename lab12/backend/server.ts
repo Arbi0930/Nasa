@@ -47,6 +47,21 @@ app.put('/update/:id', (req,res)=>{
     })
 })
 
+app.get('/search', (req, res) => {
+    const searchTerm = req.query.term;
+
+    // Assuming your 'employee' table has 'firstName' and 'lastName' columns
+    const sql = `SELECT * FROM employee WHERE firstName LIKE '%${searchTerm}%' OR lastName LIKE '%${searchTerm}%'`;
+
+    db.query(sql, (err, data) => {
+      if (err) {
+        console.error('Error searching employees:', err);
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+      return res.json(data);
+    });
+  });
+
 app.listen(8000, () => {
     console.log("listen");
 });
